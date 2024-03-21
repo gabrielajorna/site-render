@@ -6,4 +6,7 @@ app= Flask(__name__)
 def index():
   return "Olá <b>Tudo bem?</b>"
   
-  
+@app.route("/teste")
+def teste():
+  return 'Olá essa página é um <b>teste</b>!'
+
