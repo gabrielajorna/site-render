@@ -20,5 +20,6 @@ def telegram_update():
   url_envio_mensagem = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
   chat_id=update['message']['chat']['id']
   mensagem= {'chat_id': chat_id, 'text':'mensagem <b>recebida</b>!', 'parse_mode':'HTML'}
+  resultado= requests.post(url_envio_mensagem, data=mensagem)
   return 'ok'
 
