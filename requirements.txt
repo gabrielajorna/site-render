@@ -2,3 +2,6 @@ Flask
 gunicorn
 requests
 python-dotenv
+bs4
+gspread
+oauth2client.service_account
