@@ -111,3 +111,4 @@ def telegram_update(request):
 def adicionar_na_planilha(chat_id, texto):
     planilha.append_row([chat_id, texto])
     print('Mensagem armazenada com sucesso!')
+    
