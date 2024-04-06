@@ -10,15 +10,21 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 BOT_TOKEN= os.environ['TELEGRAM_BOT_TOKEN']
 
+#INTEGRAÇÃO COM WEBHOOK
+url = "https://site-render-3c9r.onrender.com"
+dados = {"url": url,'description':'teste'}
+resposta = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook", data=dados)
+print(resposta.json())
+
 #INTEGRAÇÃO COM GOOGLE SHEETS
 conteudo_credenciais = os.environ["GOOGLE_SHEETS_CREDENTIALS"]
 arquivo_credenciais = "algoritmo-aula01-822d22859c10.json"
 with open(arquivo_credenciais, mode="w") as arquivo:
   arquivo.write(conteudo_credenciais)
-conta = ServiceAccountCredentials.from_json_keyfile_name(arquivo_credenciais)
-api = gspread.authorize(conta)
-planilha = api.open_by_key("1-JGRKA-HX_vFHZB3aQJJq9cGnaOdfZbMMA8eg1qR7NY")
-sheet = planilha.worksheet("Página2")
+  conta = ServiceAccountCredentials.from_json_keyfile_name(arquivo_credenciais)
+  api = gspread.authorize(conta)
+  planilha = api.open_by_key("1-JGRKA-HX_vFHZB3aQJJq9cGnaOdfZbMMA8eg1qR7NY")
+  sheet = planilha.worksheet("Página2")
 
 app= Flask(__name__)
 
@@ -36,10 +42,39 @@ def index():
 
 @app.route('/telegram', methods=['POST'])
 def telegram_update(request):
-    dados = request.json()
-    url_envia_mensagem = f"https://api.telegram.org/bot{token}/sendMessage"
+    # Definindo todos os headers e urls das funções que serão chamadas nesta página
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
+    }
+    url_insper = "https://www.insper.edu.br/imprensa/"
+
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
+    }
+    url_peninsula = "https://www.institutopeninsula.org.br/noticias/"
+
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
+    }
+    url_igarape = "https://igarape.org.br/press-releases/"
+
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
+    }
+    url_dara = "https://dara.org.br/informe-se/noticias/"
+
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
+    }
+    url_ee = "https://esporteeducacao.org.br/noticias/"
+
     ultimo_id_processado = int(sheet.get("A1")[0][0])
     print(f"Começando a partir do update_id = {ultimo_id_processado}")
+    update = request.json
+    url_envio_mensagem = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
+    chat_id = update['message']['chat']['id']
+    mensagem = {"chat_id": chat_id, "text": resposta, 'parse_mode': 'HTML'}
+    requests.post(url_envio_mensagem, data=mensagem)
 
     for update in dados["result"]:
         if "message" not in update:  # Não é uma mensagem, pula
@@ -63,18 +98,16 @@ def telegram_update(request):
         elif texto == '/economia':
             materias_dara = scraping.raspar_dara(headers, url_dara)
             materias_igarape = scraping.raspar_igarape(headers, url_igarape)
-            resposta = formata_noticias("Economia", materias_dara + materias_neymarjr)
+            resposta = formata_noticias("Economia", materias_dara + materias_igarape)
             print(texto)
         elif texto == '/esporte':
             materias_ee = scraping.raspar_ee(headers, url_ee)
-            materias_neymarjr = scraping.raspar_neymarjr(headers, url_neymarjr)
-            resposta = formata_noticias("Esportes", materias_ee + materias_neymarjr)
+            resposta = formata_noticias("Esportes", materias_ee)
             print(texto)
         mensagem = {"chat_id": chat_id, "text": resposta, 'parse_mode': 'HTML'}
-        resultado = requests.post(url_envia_mensagem, data=mensagem)
-
-    return "ok"  # Retornar algo como ok ao final da função
+        requests.post(url_envio_mensagem, data=mensagem)
+        return "ok"  # Retornar algo como ok ao final da função
 
 def adicionar_na_planilha(chat_id, texto):
-  planilha.append_row([chat_id, texto])
-  print('Mensagem armazenada com sucesso!')
+    planilha.append_row([chat_id, texto])
+    print('Mensagem armazenada com sucesso!')
