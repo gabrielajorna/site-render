@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 import scraping
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+from google.auth.credentials import ServiceAccountCredentials
 
 BOT_TOKEN= os.environ['TELEGRAM_BOT_TOKEN']
 
