@@ -4,4 +4,4 @@ requests
 python-dotenv
 beautifulsoup4
 gspread
-google-auth
+oauth2client
