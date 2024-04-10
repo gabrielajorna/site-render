@@ -46,36 +46,25 @@ def telegram_update():
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
     }
     url_insper = "https://www.insper.edu.br/imprensa/"
-
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
-    }
     url_peninsula = "https://www.institutopeninsula.org.br/noticias/"
-
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
-    }
     url_igarape = "https://igarape.org.br/press-releases/"
-
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
-    }
     url_dara = "https://dara.org.br/informe-se/noticias/"
-
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
-    }
     url_ee = "https://esporteeducacao.org.br/noticias/"
 
     ultimo_id_processado = int(sheet.get("A1")[0][0])
     print(f"Começando a partir do update_id = {ultimo_id_processado}")
-    update = request.json()
-    url_envio_mensagem = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
-    chat_id = update['message']['chat']['id']
-    first_name = update["message"]["from"]["first_name"]
-    texto = update["message"]["text"]
-    chat_id = update["message"]["chat"]["id"]
-    print(f"Mensagem de {first_name}: {texto}")
+
+    # Verificando se há dados JSON na solicitação
+    if request.is_json:
+        update = request.json
+        url_envio_mensagem = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
+        chat_id = update['message']['chat']['id']
+        first_name = update["message"]["from"]["first_name"]
+        texto = update["message"]["text"]
+        chat_id = update["message"]["chat"]["id"]
+        print(f"Mensagem de {first_name}: {texto}")
+    else:
+        print("A solicitação não contém dados JSON.")
 
     if texto == "/start":
         resposta = "Bem-vindo(a), eu sou o Notifiquei.bot e vou te mostrar que notícias do Terceiro Setor cabem em qualquer pauta jornalística. Vamos começar? Escolha uma das editorias: /educacao, /economia, /esporte "

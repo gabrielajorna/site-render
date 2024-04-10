@@ -102,3 +102,35 @@ def raspar_ee(headers,url_ee):
   return noticias_ee
 
 raspar_ee(headers,url_ee)
+
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
+}
+url_neymarjr = "https://institutoneymarjr.org.br/noticias/"
+
+def raspar_neymarjr(headers, url_neymarjr):
+    result_neymarjr = requests.get(url_neymarjr, headers=headers)
+    soup_neymarjr = bs4.BeautifulSoup(result_neymarjr.text, 'html.parser')
+    news_neymarjr = soup_neymarjr.find_all('div', {'data-elementor-type': 'jet-listing-items'})
+
+    noticias = []
+    for n in news_neymarjr:
+        texto_noticia = n.text.strip()
+        link = get_link(n)
+        if link:
+            titulo = get_title(n)
+            noticias.append({"titulo": titulo, "link": link})
+    return noticias
+
+def get_title(div):
+    title_element = div.find('h4', class_='elementor-post__title')
+    if title_element:
+        return title_element.text.strip()
+    else:
+        return None
+
+def get_link(div):
+    if div.get('data-url'):
+        return div.get('data-url')
+    
+raspar_neymarjr(headers, url_neymarjr)    
