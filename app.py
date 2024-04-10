@@ -8,7 +8,7 @@ import scraping
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-BOT_TOKEN= os.environ['TELEGRAM_BOT_TOKEN']
+BOT_TOKEN= os.environ['BOT_TOKEN']
 
 #INTEGRAÇÃO COM WEBHOOK
 url = "https://site-render-3c9r.onrender.com"
@@ -18,13 +18,12 @@ print(resposta.json())
 
 #INTEGRAÇÃO COM GOOGLE SHEETS
 conteudo_credenciais = os.environ["GOOGLE_SHEETS_CREDENTIALS"]
-arquivo_credenciais = "algoritmo-aula01-822d22859c10.json"
-with open(arquivo_credenciais, mode="w") as arquivo:
-  arquivo.write(conteudo_credenciais)
-  conta = ServiceAccountCredentials.from_json_keyfile_name(arquivo_credenciais)
-  api = gspread.authorize(conta)
-  planilha = api.open_by_key("1-JGRKA-HX_vFHZB3aQJJq9cGnaOdfZbMMA8eg1qR7NY")
-  sheet = planilha.worksheet("Página2")
+arquivo_credenciais = "credenciais-google.json"
+  
+conta = ServiceAccountCredentials.from_json_keyfile_name(arquivo_credenciais)#nome do json 
+api = gspread.authorize(conta)
+planilha = api.open_by_key("1-JGRKA-HX_vFHZB3aQJJq9cGnaOdfZbMMA8eg1qR7NY")
+sheet = planilha.worksheet("Página2")
 
 app= Flask(__name__)
 
