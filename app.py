@@ -40,7 +40,7 @@ def index():
   return "Olá <b>Tudo bem?</b>"
 
 @app.route('/telegram', methods=['POST'])
-def telegram_update(request):
+def telegram_update():
     # Definindo todos os headers e urls das funções que serão chamadas nesta página
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
