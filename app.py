@@ -65,7 +65,9 @@ def telegram_update():
         chat_id = update["message"]["chat"]["id"]
         print(f"Mensagem de {first_name}: {texto}")
     else:
-        print("A solicitação não contém dados JSON.")
+        # Caso a solicitação não seja JSON
+        resposta = "A solicitação não contém dados JSON ou não corresponde a nenhum caso esperado."
+        return jsonify({"mensagem": resposta}), 400  # Retorna uma resposta de erro com status 400
 
     if texto == "/start":
         resposta = "Bem-vindo(a), eu sou o Notifiquei.bot e vou te mostrar que notícias do Terceiro Setor cabem em qualquer pauta jornalística. Vamos começar? Escolha uma das editorias: /educacao, /economia, /esporte "
