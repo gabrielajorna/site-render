@@ -2,6 +2,7 @@ import os
 import requests
 import bs4
 from flask import Flask, request
+from flask import jsonify
 from dotenv import load_dotenv
 load_dotenv()
 import scraping
@@ -84,7 +85,7 @@ def telegram_update():
         print(texto)
         mensagem = {"chat_id": chat_id, "text": resposta, 'parse_mode': 'HTML'}
         requests.post(url_envio_mensagem, data=mensagem)
-        return "ok"  # Retornar algo como ok ao final da função
+        return jsonify({"mensagem": resposta})
 
 def adicionar_na_planilha(chat_id, texto):
     planilha.append_row([chat_id, texto])
