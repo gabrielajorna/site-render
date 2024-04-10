@@ -11,7 +11,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 BOT_TOKEN= os.environ['BOT_TOKEN']
 
 #INTEGRAÇÃO COM WEBHOOK
-url = "https://site-render-3c9r.onrender.com"
+url = "https://site-render-3c9r.onrender.com/telegram"
 dados = {"url": url,'description':'teste'}
 resposta = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook", data=dados)
 print(resposta.json())
