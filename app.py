@@ -30,7 +30,7 @@ app= Flask(__name__)
 
 #FORMATANDO AS NOTÍCIAS RASPADAS PARA HTML 
 def formata_noticias(editoria, noticias):
-    html = f"<b>Notícias sobre {categoria}</b>\n\n"
+    html = f"<b>Que tal incluir essas notícias na sua editoria de {editoria}? </b>\n\n"
     for materia in noticias:
         # Certifique-se de que materia é um dicionário
         if isinstance(materia, dict):
@@ -72,7 +72,7 @@ def telegram_update():
         print(f"Mensagem de {first_name}: {texto}")
 
         if texto == "/start":
-            resposta = "Bem-vindo(a), eu sou o Notifiquei.bot e vou te mostrar que notícias do Terceiro Setor cabem em qualquer pauta jornalística. Vamos começar? Escolha uma das editorias: /educacao, /economia, /esporte "
+            resposta = "Bem-vindo(a), eu sou o Notifiquei.bot e vou te mostrar que notícias do Terceiro Setor cabem em qualquer pauta jornalística. Eu sou um bot programado para enviar pautas semanalmente, conte sempre comigo! . /n Vamos começar? Escolha uma das editorias: /educacao, /economia, /esporte "
         elif texto == '/educacao':
             materias_insper = scraping.raspar_insper(headers, url_insper)
             materias_peninsula = scraping.raspar_peninsula(headers, url_peninsula)
