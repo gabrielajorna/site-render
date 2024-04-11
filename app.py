@@ -56,6 +56,9 @@ def telegram_update():
     ultimo_id_processado = int(sheet.get("A1")[0][0])
     print(f"Começando a partir do update_id = {ultimo_id_processado}")
 
+    # Definindo uma resposta padrão
+    resposta = None
+
     # Verificando se há dados JSON na solicitação
     if request.is_json:
         update = request.json
@@ -65,30 +68,30 @@ def telegram_update():
         texto = update["message"]["text"]
         chat_id = update["message"]["chat"]["id"]
         print(f"Mensagem de {first_name}: {texto}")
+
+        if texto == "/start":
+            resposta = "Bem-vindo(a), eu sou o Notifiquei.bot e vou te mostrar que notícias do Terceiro Setor cabem em qualquer pauta jornalística. Vamos começar? Escolha uma das editorias: /educacao, /economia, /esporte "
+        elif texto == '/educacao':
+            materias_insper = scraping.raspar_insper(headers, url_insper)
+            materias_peninsula = scraping.raspar_peninsula(headers, url_peninsula)
+            resposta = formata_noticias("Educação", materias_insper + materias_peninsula)
+            print(texto)
+        elif texto == '/economia':
+            materias_dara = scraping.raspar_dara(headers, url_dara)
+            materias_igarape = scraping.raspar_igarape(headers, url_igarape)
+            resposta = formata_noticias("Economia", materias_dara + materias_igarape)
+            print(texto)
+        elif texto == '/esporte':
+            materias_ee = scraping.raspar_ee(headers, url_ee)
+            resposta = formata_noticias("Esportes", materias_ee)
+            print(texto)
+
     else:
         # Caso a solicitação não seja JSON
         resposta = "A solicitação não contém dados JSON ou não corresponde a nenhum caso esperado."
         return jsonify({"mensagem": resposta}), 400  # Retorna uma resposta de erro com status 400
 
-    if texto == "/start":
-        resposta = "Bem-vindo(a), eu sou o Notifiquei.bot e vou te mostrar que notícias do Terceiro Setor cabem em qualquer pauta jornalística. Vamos começar? Escolha uma das editorias: /educacao, /economia, /esporte "
-    elif texto == '/educacao':
-        materias_insper = scraping.raspar_insper(headers, url_insper)
-        materias_peninsula = scraping.raspar_peninsula(headers, url_peninsula)
-        resposta = formata_noticias("Educação", materias_insper + materias_peninsula)
-        print(texto)
-    elif texto == '/economia':
-        materias_dara = scraping.raspar_dara(headers, url_dara)
-        materias_igarape = scraping.raspar_igarape(headers, url_igarape)
-        resposta = formata_noticias("Economia", materias_dara + materias_igarape)
-        print(texto)
-    elif texto == '/esporte':
-        materias_ee = scraping.raspar_ee(headers, url_ee)
-        resposta = formata_noticias("Esportes", materias_ee)
-        print(texto)
-    
-    mensagem = {"chat_id": chat_id, "text": resposta, 'parse_mode': 'HTML'}
-    requests.post(url_envio_mensagem, data=mensagem)
+    # Retornar a resposta, independentemente do texto recebido
     return jsonify({"mensagem": resposta})
 
 def adicionar_na_planilha(chat_id, texto):
