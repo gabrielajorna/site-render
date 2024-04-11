@@ -41,6 +41,7 @@ def index():
   return "Olá <b>Tudo bem?</b>"
 
 @app.route('/telegram', methods=['POST'])
+
 def telegram_update():
     # Definindo todos os headers e urls das funções que serão chamadas nesta página
     headers = {
@@ -85,9 +86,10 @@ def telegram_update():
         materias_ee = scraping.raspar_ee(headers, url_ee)
         resposta = formata_noticias("Esportes", materias_ee)
         print(texto)
-        mensagem = {"chat_id": chat_id, "text": resposta, 'parse_mode': 'HTML'}
-        requests.post(url_envio_mensagem, data=mensagem)
-        return jsonify({"mensagem": resposta})
+    
+    mensagem = {"chat_id": chat_id, "text": resposta, 'parse_mode': 'HTML'}
+    requests.post(url_envio_mensagem, data=mensagem)
+    return jsonify({"mensagem": resposta})
 
 def adicionar_na_planilha(chat_id, texto):
     planilha.append_row([chat_id, texto])
