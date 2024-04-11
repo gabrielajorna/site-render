@@ -30,10 +30,12 @@ app= Flask(__name__)
 
 #FORMATANDO AS NOTÍCIAS RASPADAS PARA HTML 
 def formata_noticias(editoria, noticias):
-  html = f"Que tal incluir essas notícias na sua próxima pauta de {editoria}:\n\n"
-  for materia in noticias:
-    html += f'- <a href="{materia["url"]}">{materia["titulo"]}</a>\n'
-  return html
+    html = f"<b>Notícias sobre {categoria}</b>\n\n"
+    for materia in noticias:
+        # Certifique-se de que materia é um dicionário
+        if isinstance(materia, dict):
+            html += f'- <a href="{materia["url"]}">{materia["titulo"]}</a>\n'
+    return html
 
 #INICIANDO AS PÁGINAS DO SITE
 @app.route("/")
