@@ -87,6 +87,8 @@ def telegram_update():
             materias_ee = scraping.raspar_ee(headers, url_ee)
             resposta = formata_noticias("Esportes", materias_ee)
             print(texto)
+        mensagem={"chat_id": chat_id, "text": resposta, 'parse_mode': 'HTML'}
+        requests.post(url_envio_mensagem, data=mensagem)
 
     else:
         # Caso a solicitação não seja JSON
