@@ -18,8 +18,6 @@ def raspar_insper(headers, url_insper):
     noticias_insper.append([titulo,link_insper])
   return noticias_insper
 
-raspar_insper(headers, url_insper)
-
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
 }
@@ -35,8 +33,6 @@ def raspar_peninsula(headers, url_peninsula):
     titulo = link.find('a', {'class':'item__link'}).text.strip()
     noticias_peninsula.append([titulo,link_peninsula])
   return noticias_peninsula
-
-raspar_peninsula(headers, url_peninsula)
 
 #INICIANDO AS RASPAGENS DE ECONOMIA
 headers = {
@@ -63,8 +59,6 @@ def raspar_igarape(headers, url_igarape):
                     noticias_igarape.append([titulo, link])
     return noticias_igarape
 
-raspar_igarape(headers, url_igarape)
-
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
 }
@@ -81,8 +75,6 @@ def raspar_dara(headers,url_dara):
     titulo = link.find('a').text.strip()
     noticias_dara.append([titulo,link_dara])
   return noticias_dara
-
-raspar_dara(headers,url_dara)
 
 #INICIANDO AS RASPAGENS DE ESPORTES
 headers = {
@@ -101,7 +93,6 @@ def raspar_ee(headers,url_ee):
     noticias_ee.append([titulo,link_ee])
   return noticias_ee
 
-raspar_ee(headers,url_ee)
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
@@ -133,4 +124,4 @@ def get_link(div):
     if div.get('data-url'):
         return div.get('data-url')
     
-raspar_neymarjr(headers, url_neymarjr)    
+   

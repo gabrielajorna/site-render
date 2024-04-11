@@ -29,7 +29,7 @@ sheet = planilha.worksheet("Página2")
 app= Flask(__name__)
 
 #FORMATANDO AS NOTÍCIAS RASPADAS PARA HTML 
-def formata_noticias(editoria, noticias):
+def formata_noticias():
     html = f"<b>Que tal incluir essas notícias na sua editoria de {editoria}? </b>\n\n"
     for materia in noticias:
         # Certifique-se de que materia é um dicionário
