@@ -92,8 +92,8 @@ def telegram_update():
             print(texto)
            
         mensagem={"chat_id": chat_id, "text": resposta, 'parse_mode': 'HTML'}
-        adicionar_na_planilha(chat_id, texto)
         requests.post(url_envio_mensagem, data=mensagem)
+        adicionar_na_planilha(chat_id, texto)
     else:
         # Caso a solicitação não seja JSON
         resposta = "A solicitação não contém dados JSON ou não corresponde a nenhum caso esperado."
@@ -105,3 +105,4 @@ def telegram_update():
 def adicionar_na_planilha(chat_id, texto):
     planilha.append_row([chat_id, texto])
     print('Mensagem armazenada com sucesso!')
+
