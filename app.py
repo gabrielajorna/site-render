@@ -32,7 +32,7 @@ app= Flask(__name__)
 def formata_noticias(titulo, noticias):
     html = f"<b>Que tal incluir essas notícias na sua editoria de {titulo}? </b>\n\n"
     # Iterar sobre os primeiros cinco itens da lista de notícias
-    for noticia in noticias[:5]:
+    for noticia in noticias:
         # Certifique-se de que noticia é uma lista com dois elementos (título e URL)
         if isinstance(noticia, list) and len(noticia) == 2:
             titulo = noticia[0]
