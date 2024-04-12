@@ -96,7 +96,7 @@ def telegram_update():
             resposta = formata_noticias("Esportes", materias_esporte)
             print(texto)
         mensagem={"chat_id": chat_id, "text": resposta, 'parse_mode': 'HTML'}
-        requests.post(url_envio_mensagem, data=mensagem)
+        return requests.post(url_envio_mensagem, data=mensagem)
 
     else:
         # Caso a solicitação não seja JSON
@@ -104,7 +104,7 @@ def telegram_update():
         return jsonify({"mensagem": resposta}), 400  # Retorna uma resposta de erro com status 400
 
     # Retornar a resposta, independentemente do texto recebido
-    return jsonify({"mensagem": resposta})
+    ##return jsonify({"mensagem": resposta})
 
 def adicionar_na_planilha(chat_id, texto):
     planilha.append_row([chat_id, texto])
