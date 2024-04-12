@@ -29,13 +29,16 @@ sheet = planilha.worksheet("Página2")
 app= Flask(__name__)
 
 #FORMATANDO AS NOTÍCIAS RASPADAS PARA HTML 
-#def formata_noticias(titulo, noticias):
-    #html = f"<b>Que tal incluir essas notícias na sua editoria de {titulo}? </b>\n\n"
-    #for noticia in noticias:
-        # Certifique-se de que noticia é um dicionário
-        #if isinstance(noticia, dict) and "titulo" in noticia and "url" in noticia:
-            #html += f'- <a href="{noticia["url"]}">{noticia["titulo"]}</a>\n'
-    #return html
+def formata_noticias(titulo, noticias):
+    html = f"<b>Que tal incluir essas notícias na sua editoria de {titulo}? </b>\n\n"
+    # Iterar sobre os primeiros cinco itens da lista de notícias
+    for noticia in noticias[:5]:
+        # Certifique-se de que noticia é uma lista com dois elementos (título e URL)
+        if isinstance(noticia, list) and len(noticia) == 2:
+            titulo = noticia[0]
+            url = noticia[1]
+            html += f'- <a href="{url}">{titulo}</a>\n'
+    return html
 
 #INICIANDO AS PÁGINAS DO SITE
 @app.route("/")
@@ -74,13 +77,11 @@ def telegram_update():
         if texto == "/start":
             resposta = "Olá, eu sou o Notifiquei.bot e vou te mostrar que notícias do Terceiro Setor cabem em qualquer pauta jornalística. Sou programado para enviar pautas semanalmente, basta você escolher uma das editorias a seguir que te mandarei imediatamente algumas opções de organizações e seus trabalhos sociais. Toda terça-feira tem conteúdo fresquinho por aqui, volte sempre! Vamos começar? Escolha uma das editorias que gostaria de acompanhar: /educacao, /economia, /esporte."
         elif texto == '/educacao':
-            materias_insper = raspar_insper(headers, url_insper)
-            materias_peninsula = raspar_peninsula(headers, url_peninsula)
-            noticias = materias_insper + materias_peninsula
-            resposta = f"<b>Que tal incluir essas notícias na sua editoria de Educação? </b>\n\n"
-            for noticia in noticias:
-                resposta += f'- <a href="{noticia["url"]}">{noticia["titulo"]}</a>\n'
-            print(resposta)
+            materias_insper = scraping.raspar_insper(headers, url_insper)
+            materias_peninsula = scraping.raspar_peninsula(headers, url_peninsula)
+            materias_educacao = materias_insper + materias_peninsula
+            resposta = formata_noticias("Educação", materias_educacao)
+            print(texto)
         elif texto == '/economia':
             materias_dara = scraping.raspar_dara(headers, url_dara)
             materias_igarape = scraping.raspar_igarape(headers, url_igarape)
@@ -103,28 +104,6 @@ def telegram_update():
 
     # Retornar a resposta, independentemente do texto recebido
     return jsonify({"mensagem": resposta})
-
-def raspar_insper(headers, url_insper):
-  result_insper = requests.get(url_insper,  headers = headers)
-  soup_insper = bs4.BeautifulSoup(result_insper.text, 'html.parser')
-  links_insper = soup_insper.find_all('div', { 'class': '_thumbnail__descricao no-paddingM' })
-  noticias_insper = []
-  for link in links_insper:
-    link_insper = link.find('a').get('href')
-    titulo = link.find('a').text.strip()
-    noticias_insper.append([titulo,link_insper])
-  return noticias_insper
-
-def raspar_peninsula(headers, url_peninsula):
-  result_peninsula = requests.get(url_peninsula,  headers = headers)
-  soup_peninsula = bs4.BeautifulSoup(result_peninsula.text, 'html.parser')
-  links_peninsula = soup_peninsula.find_all('div', { 'class': 'item' })
-  noticias_peninsula = []
-  for link in links_peninsula:
-    link_peninsula = link.find('a').get('href')
-    titulo = link.find('a', {'class':'item__link'}).text.strip()
-    noticias_peninsula.append([titulo,link_peninsula])
-  return noticias_peninsula
 
 def adicionar_na_planilha(chat_id, texto):
     planilha.append_row([chat_id, texto])
