@@ -29,7 +29,7 @@ sheet = planilha.worksheet("Página2")
 app= Flask(__name__)
 
 #FORMATANDO AS NOTÍCIAS RASPADAS PARA HTML 
-def formata_noticias():
+def formata_noticias(editoria,noticias):
     html = f"<b>Que tal incluir essas notícias na sua editoria de {editoria}? </b>\n\n"
     for materia in noticias:
         # Certifique-se de que materia é um dicionário
@@ -54,6 +54,7 @@ def telegram_update():
     url_igarape = "https://igarape.org.br/press-releases/"
     url_dara = "https://dara.org.br/informe-se/noticias/"
     url_ee = "https://esporteeducacao.org.br/noticias/"
+    url_neymarjr = "https://institutoneymarjr.org.br/noticias/"
 
     ultimo_id_processado = int(sheet.get("A1")[0][0])
     print(f"Começando a partir do update_id = {ultimo_id_processado}")
@@ -72,7 +73,7 @@ def telegram_update():
         print(f"Mensagem de {first_name}: {texto}")
 
         if texto == "/start":
-            resposta = "Bem-vindo(a), eu sou o Notifiquei.bot e vou te mostrar que notícias do Terceiro Setor cabem em qualquer pauta jornalística. Eu sou um bot programado para enviar pautas semanalmente, conte sempre comigo! . /n Vamos começar? Escolha uma das editorias: /educacao, /economia, /esporte "
+            resposta = "Bem-vindo(a), eu sou o Notifiquei.bot e vou te mostrar que notícias do Terceiro Setor cabem em qualquer pauta jornalística. Eu sou um bot programado para enviar pautas semanalmente. Vamos começar? Escolha uma das editorias que gostaria de acompanhar: /educacao, /economia, /esporte."
         elif texto == '/educacao':
             materias_insper = scraping.raspar_insper(headers, url_insper)
             materias_peninsula = scraping.raspar_peninsula(headers, url_peninsula)
@@ -85,6 +86,7 @@ def telegram_update():
             print(texto)
         elif texto == '/esporte':
             materias_ee = scraping.raspar_ee(headers, url_ee)
+            materias_neymarjr = scraping.raspar_neymarjr(headers, url_neymarjr)
             resposta = formata_noticias("Esportes", materias_ee)
             print(texto)
         mensagem={"chat_id": chat_id, "text": resposta, 'parse_mode': 'HTML'}
