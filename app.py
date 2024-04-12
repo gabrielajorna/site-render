@@ -73,7 +73,7 @@ def telegram_update():
         print(f"Mensagem de {first_name}: {texto}")
 
         if texto == "/start":
-            resposta = "Olá, eu sou o Notifiquei.bot e vou te mostrar que notícias do Terceiro Setor cabem em qualquer pauta jornalística. Sou programado para enviar pautas semanalmente, basta você escolher uma das editorias a seguir que te mandarei imediatamente algumas opções de organizações e seus trabalhos sociais. Toda terça-feira tem conteúdo fresquinho por aqui, volte sempre! Vamos começar? Escolha uma das editorias que gostaria de acompanhar: /educacao, /economia, /esporte."
+            resposta = "Olá, eu sou o Notifiquei.bot e vou te mostrar que notícias do Terceiro Setor cabem em qualquer pauta jornalística. Sou programado para enviar pautas semanalmente, basta você escolher uma das editorias a seguir que te mandarei imediatamente algumas opções de organizações e seus trabalhos sociais. Toda terça-feira tem conteúdo fresquinho por aqui, volte sempre! Vamos começar? Escolha uma das editorias que gostaria de acompanhar: /educacao ou /esporte."
         elif texto == '/educacao':
             materias_insper = scraping.raspar_insper(headers, url_insper)
             materias_peninsula = scraping.raspar_peninsula(headers, url_peninsula)
