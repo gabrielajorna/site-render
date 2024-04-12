@@ -54,8 +54,6 @@ def telegram_update():
     }
     url_insper = "https://www.insper.edu.br/imprensa/"
     url_peninsula = "https://www.institutopeninsula.org.br/noticias/"
-    url_igarape = "https://igarape.org.br/press-releases/"
-    url_dara = "https://dara.org.br/informe-se/noticias/"
     url_ee = "https://esporteeducacao.org.br/noticias/"
     url_neymarjr = "https://institutoneymarjr.org.br/noticias/"
 
@@ -84,14 +82,6 @@ def telegram_update():
             materias_educacao.extend(materias_peninsula)
             resposta = formata_noticias("Educação", materias_educacao)
             print(texto)
-        elif texto == '/economia':
-            materias_dara = scraping.raspar_dara(headers, url_dara)
-            materias_igarape = scraping.raspar_igarape(headers, url_igarape)
-            materias_economia = []
-            materias_economia.extend(materias_dara)
-            materias_economia.extend(materias_igarape)
-            resposta = formata_noticias("Economia", materias_economia)
-            print(texto)
         elif texto == '/esporte':
             materias_ee = scraping.raspar_ee(headers, url_ee)
             materias_neymarjr = scraping.raspar_neymarjr(headers, url_neymarjr)
@@ -102,6 +92,7 @@ def telegram_update():
             print(texto)
            
         mensagem={"chat_id": chat_id, "text": resposta, 'parse_mode': 'HTML'}
+        adicionar_na_planilha(chat_id, texto)
         requests.post(url_envio_mensagem, data=mensagem)
     else:
         # Caso a solicitação não seja JSON

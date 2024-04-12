@@ -34,48 +34,6 @@ def raspar_peninsula(headers, url_peninsula):
     noticias_peninsula.append([titulo,link_peninsula])
   return noticias_peninsula
 
-#INICIANDO AS RASPAGENS DE ECONOMIA
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
-}
-url_igarape = "https://igarape.org.br/press-releases/"
-
-def raspar_igarape(headers, url_igarape):
-    noticias_igarape = []
-    response = requests.get(url_igarape, headers=headers)
-    soup = bs4.BeautifulSoup(response.content, 'html.parser')
-    conteudo = soup.find_all('div', {'class': 'uc_post_grid_style_one_item ue_post_grid_item ue-item'})
-
-    for item in conteudo:
-        titulo_link = item.find('a', {'class': 'uc_post_grid_style_one_image'})
-        if titulo_link:
-            # Ajuste aqui: Buscar diretamente o 'div' com classe 'uc_post_title' dentro de 'item', não de 'titulo_link'
-            div_titulo = item.find('div', class_='uc_post_title')
-            if div_titulo:
-                titulo = div_titulo.text.strip()
-                link = titulo_link['href']
-                # Verifica se o link já existe na lista para evitar duplicatas
-                if not any(noticia[1] == link for noticia in noticias_igarape):
-                    noticias_igarape.append([titulo, link])
-    return noticias_igarape
-
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
-}
-
-url_dara = "https://dara.org.br/informe-se/noticias/"
-
-def raspar_dara(headers,url_dara):
-  result_dara = requests.get(url_dara,  headers = headers)
-  soup_dara = bs4.BeautifulSoup(result_dara.text, 'html.parser')
-  links_dara = soup_dara.find_all('div', { 'class': 'category-post-conteudo' })
-  noticias_dara = []
-  for link in links_dara:
-    link_dara = link.find('a').get('href')
-    titulo = link.find('a').text.strip()
-    noticias_dara.append([titulo,link_dara])
-  return noticias_dara
-
 #INICIANDO AS RASPAGENS DE ESPORTES
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0',
