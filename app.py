@@ -79,19 +79,25 @@ def telegram_update():
         elif texto == '/educacao':
             materias_insper = scraping.raspar_insper(headers, url_insper)
             materias_peninsula = scraping.raspar_peninsula(headers, url_peninsula)
-            materias_educacao = materias_insper + materias_peninsula
+            materias_educacao = []
+            materias_educacao.extend(materias_insper)
+            materias_educacao.extend(materias_peninsula)
             resposta = formata_noticias("Educação", materias_educacao)
             print(texto)
         elif texto == '/economia':
             materias_dara = scraping.raspar_dara(headers, url_dara)
             materias_igarape = scraping.raspar_igarape(headers, url_igarape)
-            materias_economia = materias_dara + materias_igarape
+            materias_economia = []
+            materias_economia.extend(materias_dara)
+            materias_economia.extend(materias_igarape)
             resposta = formata_noticias("Economia", materias_economia)
             print(texto)
         elif texto == '/esporte':
             materias_ee = scraping.raspar_ee(headers, url_ee)
             materias_neymarjr = scraping.raspar_neymarjr(headers, url_neymarjr)
-            materias_esporte = materias_ee + materias_neymarjr
+            materias_esporte = []
+            materias_esporte.extend(materias_ee)
+            materias_esporte.extend(materias_neymarjr)
             resposta = formata_noticias("Esportes", materias_esporte)
             print(texto)
            
