@@ -1,4 +1,4 @@
-# Meu site no ar
+# Notifiquei.bot - o coach de pautas do Terceiro Setor
 Neste repositório você pode conferir o conteúdo do Trabalho Final do Master em Jornalismo de Dados, Automação e Data Storytelling do Insper que contém:
 
 - Site em Flask
