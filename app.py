@@ -44,11 +44,6 @@ def index():
 
 @app.route('/telegram', methods=['POST'])
 
-def enviar_mensagem(chat_id, texto):
-    url_envio_mensagem = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
-    mensagem={"chat_id": chat_id, "text": resposta, 'parse_mode': 'HTML'}
-    requests.post(url_envio_mensagem, data=mensagem)
-
 def telegram_update():
     # Definindo todos os headers e urls das funções que serão chamadas nesta página
     headers = {
@@ -69,6 +64,7 @@ def telegram_update():
 
     # Verificando se há dados JSON na solicitação
     if request.is_json:
+        url_envio_mensagem = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
         update = request.json
         chat_id = update['message']['chat']['id']
         first_name = update["message"]["from"]["first_name"]
@@ -98,6 +94,8 @@ def telegram_update():
             resposta = formata_noticias("Esportes", materias_esporte)
             print(texto)
            
+        mensagem={"chat_id": chat_id, "text": resposta, 'parse_mode': 'HTML'}
+        requests.post(url_envio_mensagem, data=mensagem)
     else:
         # Caso a solicitação não seja JSON
         resposta = "A solicitação não contém dados JSON ou não corresponde a nenhum caso esperado."
