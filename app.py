@@ -74,30 +74,30 @@ def telegram_update():
 
         if texto == "/start":
             resposta = "Olá, eu sou o Notifiquei.bot e vou te mostrar que notícias do Terceiro Setor cabem em qualquer pauta jornalística. Sou programado para enviar pautas semanalmente, basta você escolher uma das editorias a seguir que te mandarei imediatamente algumas opções de organizações e seus trabalhos sociais. Toda terça-feira tem conteúdo fresquinho por aqui, volte sempre! Vamos começar? Escolha uma das editorias que gostaria de acompanhar: /educacao, /economia, /esporte."
-        elif texto == '/educacao':
-            materias_insper = scraping.raspar_insper(headers, url_insper)
-            materias_peninsula = scraping.raspar_peninsula(headers, url_peninsula)
-            materias_educacao = materias_insper + materias_peninsula
-            print("Materias Educação:", materias_educacao)  # Adicionado para depuração
-            resposta = formata_noticias("Educação", materias_educacao)
-            print(resposta)
-        elif texto == '/economia':
-            materias_dara = scraping.raspar_dara(headers, url_dara)
-            materias_igarape = scraping.raspar_igarape(headers, url_igarape)
-            materias_economia = materias_dara + materias_igarape
-            print("Materias Economia:", materias_economia)  # Adicionado para depuração
-            resposta = formata_noticias("Economia", materias_economia)
-            print(texto)
-        elif texto == '/esporte':
-            materias_ee = scraping.raspar_ee(headers, url_ee)
-            materias_neymarjr = scraping.raspar_neymarjr(headers, url_neymarjr)
-            materias_esporte = materias_ee + materias_neymarjr
-            print("Materias Esporte:", materias_esporte)  # Adicionado para depuração
-            resposta = formata_noticias("Esportes", materias_esporte)
-            print(texto)
+            if texto == '/educacao':
+                materias_insper = scraping.raspar_insper(headers, url_insper)
+                materias_peninsula = scraping.raspar_peninsula(headers, url_peninsula)
+                materias_educacao = materias_insper + materias_peninsula
+                print("Materias Educação:", materias_educacao)  # Adicionado para depuração
+                resposta = formata_noticias("Educação", materias_educacao)
+                print(resposta)
+                if texto == '/economia':
+                    materias_dara = scraping.raspar_dara(headers, url_dara)
+                    materias_igarape = scraping.raspar_igarape(headers, url_igarape)
+                    materias_economia = materias_dara + materias_igarape
+                    print("Materias Economia:", materias_economia)  # Adicionado para depuração
+                    resposta = formata_noticias("Economia", materias_economia)
+                    print(texto)
+                    if texto == '/esporte':
+                        materias_ee = scraping.raspar_ee(headers, url_ee)
+                        materias_neymarjr = scraping.raspar_neymarjr(headers, url_neymarjr)
+                        materias_esporte = materias_ee + materias_neymarjr
+                        print("Materias Esporte:", materias_esporte)  # Adicionado para depuração
+                        resposta = formata_noticias("Esportes", materias_esporte)
+                        print(texto)
         
         mensagem={"chat_id": chat_id, "text": resposta, 'parse_mode': 'HTML'}
-        #requests.post(url_envio_mensagem, data=mensagem)
+        requests.post(url_envio_mensagem, data=mensagem)
 
     else:
         # Caso a solicitação não seja JSON
@@ -105,7 +105,7 @@ def telegram_update():
         return jsonify({"mensagem": resposta}), 400  # Retorna uma resposta de erro com status 400
 
     # Retornar a resposta, independentemente do texto recebido
-    return requests.post(url_envio_mensagem, data=mensagem)
+    return jsonify({"mensagem": resposta})
 
 def adicionar_na_planilha(chat_id, texto):
     planilha.append_row([chat_id, texto])
