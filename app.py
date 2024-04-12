@@ -29,12 +29,12 @@ sheet = planilha.worksheet("Página2")
 app= Flask(__name__)
 
 #FORMATANDO AS NOTÍCIAS RASPADAS PARA HTML 
-def formata_noticias(editoria,noticias):
-    html = f"<b>Que tal incluir essas notícias na sua editoria de {editoria}? </b>\n\n"
-    for materia in noticias:
-        # Certifique-se de que materia é um dicionário
-        if isinstance(materia, dict):
-            html += f'- <a href="{materia["url"]}">{materia["titulo"]}</a>\n'
+def formata_noticias(titulo, noticias):
+    html = f"<b>Que tal incluir essas notícias na sua editoria de {titulo}? </b>\n\n"
+    for noticia in noticias:
+        # Certifique-se de que noticia é um dicionário
+        if isinstance(noticia, dict) and "titulo" in noticia and "url" in noticia:
+            html += f'- <a href="{noticia["url"]}">{noticia["titulo"]}</a>\n'
     return html
 
 #INICIANDO AS PÁGINAS DO SITE
@@ -73,7 +73,7 @@ def telegram_update():
         print(f"Mensagem de {first_name}: {texto}")
 
         if texto == "/start":
-            resposta = "Bem-vindo(a), eu sou o Notifiquei.bot e vou te mostrar que notícias do Terceiro Setor cabem em qualquer pauta jornalística. Eu sou um bot programado para enviar pautas semanalmente. Vamos começar? Escolha uma das editorias que gostaria de acompanhar: /educacao, /economia, /esporte."
+            resposta = "Olá, eu sou o Notifiquei.bot e vou te mostrar que notícias do Terceiro Setor cabem em qualquer pauta jornalística. Sou programado para enviar pautas semanalmente, basta você escolher uma das editorias a seguir que te mandarei imediatamente algumas opções de organizações e seus trabalhos sociais. Toda terça-feira tem conteúdo fresquinho por aqui, volte sempre! Vamos começar? Escolha uma das editorias que gostaria de acompanhar: /educacao, /economia, /esporte."
         elif texto == '/educacao':
             materias_insper = scraping.raspar_insper(headers, url_insper)
             materias_peninsula = scraping.raspar_peninsula(headers, url_peninsula)
